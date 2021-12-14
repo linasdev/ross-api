@@ -7,3 +7,17 @@ license-file = "LICENSE.md"
 description = "API for the Rusty Old Smart System"
 repository = "https://github.com/linasdev/ross-api"
 readme = "README.md"
+
+[dependencies]
+rocket = "0.4.10"
+rocket_contrib = "0.4.10"
+serialport = "4.0.1"
+ross-configurator = "1.1.0"
+
+[dependencies.serde]
+version = "1.0.131"
+features = ["derive"]
+
+[dependencies.ross-protocol]
+version = "1.34.0"
+features = ["std"]

@@ -1,0 +1,5 @@
+[development]
+serial_device = "/dev/ttyUSB0"
+serial_baudrate = 115200
+transaction_retry_count = 3
+packet_timeout_ms = 10
