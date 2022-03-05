@@ -1,2 +1,2 @@
-pub mod device;
 pub mod action;
+pub mod device;
