@@ -12,12 +12,12 @@ readme = "README.md"
 rocket = "0.4.10"
 rocket_contrib = "0.4.10"
 serialport = "4.0.1"
-ross-configurator = "1.1.0"
+ross-configurator = "1.6.0"
 
 [dependencies.serde]
 version = "1.0.131"
 features = ["derive"]
 
 [dependencies.ross-protocol]
-version = "1.34.0"
-features = ["std"]
+version = "2.8.0"
+features = ["std", "send"]

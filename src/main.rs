@@ -1,11 +1,16 @@
 #![feature(decl_macro)]
 
+use std::time::Duration;
 use rocket::fairing::AdHoc;
+
+use ross_protocol::protocol::{BROADCAST_ADDRESS, Protocol};
+use ross_protocol::interface::serial::Serial;
+
+use std::sync::Mutex;
 
 pub mod controllers;
 pub mod routes;
 pub mod models;
-pub mod helpers;
 pub mod errors;
 
 fn main() {
@@ -16,19 +21,19 @@ fn main() {
             let transaction_retry_count = rocket.config().get_int("transaction_retry_count").unwrap() as u32;
             let packet_timeout_ms = rocket.config().get_int("packet_timeout_ms").unwrap() as u32;
 
-            Ok(rocket.manage(ProtocolConfig {
-                serial_device,
-                serial_baudrate,
-                transaction_retry_count,
-                packet_timeout_ms,
-            }))
+            let port = match serialport::new(serial_device.clone(), serial_baudrate)
+            .timeout(Duration::from_millis(
+                (transaction_retry_count * packet_timeout_ms) as u64,
+            ))
+            .open() {
+                Ok(port) => port,
+                Err(_) => {
+                    panic!("Failed to open serial port");
+                },
+            };
+    
+            let serial = Serial::new(port);
+            Ok(rocket.manage(Mutex::new(Protocol::new(BROADCAST_ADDRESS, serial))))
         }))
         .launch();
-}
-
-pub struct ProtocolConfig {
-    pub serial_device: String,
-    pub serial_baudrate: u32,
-    pub transaction_retry_count: u32,
-    pub packet_timeout_ms: u32,
 }
