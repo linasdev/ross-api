@@ -1,6 +1,6 @@
 use rocket::{get, post, State};
 use rocket_contrib::json::Json;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 
 use ross_configurator::get_programmer::get_programmer;
 use ross_protocol::convert_packet::ConvertPacket;
@@ -14,7 +14,7 @@ use crate::models::device::Device;
 
 #[get("/")]
 pub fn get_devices(
-    protocol: State<Mutex<Protocol<Serial>>>,
+    protocol: State<Arc<Mutex<Protocol<Serial>>>>,
 ) -> Result<Json<Vec<Device>>, ApiError> {
     let mut protocol = protocol.lock().unwrap();
 
@@ -34,7 +34,7 @@ pub fn act_bcm(
     bcm_address: u16,
     peripheral_id: u8,
     action: Json<BcmAction>,
-    protocol: State<Mutex<Protocol<Serial>>>,
+    protocol: State<Arc<Mutex<Protocol<Serial>>>>,
 ) -> Result<(), ApiError> {
     let mut protocol = protocol.lock().unwrap();
 
