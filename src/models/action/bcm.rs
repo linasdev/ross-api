@@ -3,22 +3,22 @@ use serde::Deserialize;
 use ross_protocol::event::bcm::BcmValue;
 
 #[derive(Deserialize)]
-#[serde(tag = "action_type")]
+#[serde(tag = "actionType")]
 pub enum BcmAction {
-    #[serde(rename = "change_brightness")]
+    #[serde(rename = "changeBrightness")]
     ChangeBrightness {
         action_value: BcmChangeBrightnessValue,
     },
 }
 
 #[derive(Deserialize)]
-#[serde(tag = "value_type")]
+#[serde(tag = "valueType")]
 pub enum BcmChangeBrightnessValue {
     #[serde(rename = "single")]
     Single { value: u8 },
     #[serde(rename = "rgb")]
     Rgb { red: u8, green: u8, blue: u8 },
-    #[serde(rename = "rgb_b")]
+    #[serde(rename = "rgbB")]
     RgbB {
         red: u8,
         green: u8,
@@ -32,7 +32,7 @@ pub enum BcmChangeBrightnessValue {
         blue: u8,
         white: u8,
     },
-    #[serde(rename = "rgbw_b")]
+    #[serde(rename = "rgbwB")]
     RgbwB {
         red: u8,
         green: u8,
