@@ -3,16 +3,19 @@ use serde::Deserialize;
 use ross_protocol::event::bcm::BcmValue;
 
 #[derive(Deserialize)]
-#[serde(tag = "type", content = "payload", rename_all = "SCREAMING_SNAKE_CASE")]
+#[serde(tag = "type", content = "payload")]
 pub enum BcmCommandPayload {
+    #[serde(rename = "BCM_SET_BINARY")]
     SetBinary {
         #[serde(rename = "VALUE")]
         value: bool,
     },
+    #[serde(rename = "BCM_SET_SINGLE")]
     SetSingle {
         #[serde(rename = "VALUE")]
         value: u8,
     },
+    #[serde(rename = "BCM_SET_RGB")]
     SetRgb {
         #[serde(rename = "RED")]
         red: u8,
@@ -21,6 +24,7 @@ pub enum BcmCommandPayload {
         #[serde(rename = "BLUE")]
         blue: u8,
     },
+    #[serde(rename = "BCM_SET_RGBW")]
     SetRgbw {
         #[serde(rename = "RED")]
         red: u8,
