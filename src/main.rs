@@ -10,6 +10,7 @@ use std::convert::TryInto;
 use ross_protocol::interface::serial::Serial;
 use ross_protocol::protocol::{Protocol, BROADCAST_ADDRESS};
 use ross_protocol::event::bcm::BcmChangeBrightnessEvent;
+use ross_protocol::event::relay::RelaySetValueEvent;
 use ross_protocol::event::gateway::GatewayDiscoverEvent;
 use ross_protocol::convert_packet::ConvertPacket;
 use ross_configurator::get_programmer::get_programmer;
@@ -68,6 +69,14 @@ fn main() {
                                 peripheral_state: PeripheralState::Bcm(peripheral_state),
                         });
                     }
+                } else if let Ok(event) = RelaySetValueEvent::try_from_packet(packet) {
+                    if let Ok(peripheral_state) = event.value.try_into() {
+                        gateway_state_clone.lock().unwrap().device_states.push(DeviceState {
+                                peripheral_address: event.transmitter_address,
+                                peripheral_index: event.index,
+                                peripheral_state: PeripheralState::Relay(peripheral_state),
+                        });
+                    }
                 }
             }),
             false,
@@ -86,6 +95,12 @@ fn main() {
                 let packet = match device_command.payload {
                     CommandPayload::Bcm(payload) => BcmChangeBrightnessEvent {
                         bcm_address: device_command.peripheral_address,
+                        transmitter_address: programmer.programmer_address,
+                        index: device_command.peripheral_index,
+                        value: payload.into(),
+                    }.to_packet(),
+                    CommandPayload::Relay(payload) => RelaySetValueEvent {
+                        relay_address: device_command.peripheral_address,
                         transmitter_address: programmer.programmer_address,
                         index: device_command.peripheral_index,
                         value: payload.into(),

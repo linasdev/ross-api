@@ -1,8 +1,10 @@
 use serde::Serialize;
 
 use bcm::BcmPeripheralState;
+use relay::RelayPeripheralState;
 
 pub mod bcm;
+pub mod relay;
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -21,5 +23,6 @@ pub struct DeviceState {
 #[derive(Serialize)]
 #[serde(untagged)]
 pub enum PeripheralState {
-    Bcm(BcmPeripheralState)
+    Bcm(BcmPeripheralState),
+    Relay(RelayPeripheralState),
 }

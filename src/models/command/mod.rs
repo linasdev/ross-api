@@ -1,8 +1,10 @@
 use serde::Deserialize;
 
 use bcm::BcmCommandPayload;
+use relay::RelayCommandPayload;
 
 pub mod bcm;
+pub mod relay;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -23,4 +25,5 @@ pub struct DeviceCommand {
 #[serde(untagged)]
 pub enum CommandPayload {
     Bcm(BcmCommandPayload),
+    Relay(RelayCommandPayload),
 }
