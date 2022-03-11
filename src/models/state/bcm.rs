@@ -4,14 +4,16 @@ use std::convert::TryFrom;
 use ross_protocol::event::bcm::BcmValue;
 
 #[derive(Serialize)]
-#[serde(tag = "type", content = "payload", rename_all = "SCREAMING_SNAKE_CASE")]
+#[serde(tag = "type", content = "payload")]
 pub enum BcmPeripheralState {
+    #[serde(rename = "BCM_SINGLE")]
     Single {
         #[serde(rename = "ON")]
         on: bool,
         #[serde(rename = "BRIGHTNESS")]
         brightness: u8,
     },
+    #[serde(rename = "BCM_RGB_B")]
     RgbB {
         #[serde(rename = "ON")]
         on: bool,
@@ -24,6 +26,7 @@ pub enum BcmPeripheralState {
         #[serde(rename = "BRIGHTNESS")]
         brightness: u8,
     },
+    #[serde(rename = "BCM_RGBW_B")]
     RgbwB {
         #[serde(rename = "ON")]
         on: bool,
