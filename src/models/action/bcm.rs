@@ -3,7 +3,7 @@ use serde::Deserialize;
 use ross_protocol::event::bcm::BcmValue;
 
 #[derive(Deserialize)]
-#[serde(tag = "actionType")]
+#[serde(tag = "actionType", rename_all = "camelCase")]
 pub enum BcmAction {
     #[serde(rename = "changeBrightness")]
     ChangeBrightness {
@@ -12,27 +12,23 @@ pub enum BcmAction {
 }
 
 #[derive(Deserialize)]
-#[serde(tag = "valueType")]
+#[serde(tag = "valueType", rename_all = "camelCase")]
 pub enum BcmChangeBrightnessValue {
-    #[serde(rename = "single")]
+    Binary { value: bool },
     Single { value: u8 },
-    #[serde(rename = "rgb")]
     Rgb { red: u8, green: u8, blue: u8 },
-    #[serde(rename = "rgbB")]
     RgbB {
         red: u8,
         green: u8,
         blue: u8,
         brightness: u8,
     },
-    #[serde(rename = "rgbw")]
     Rgbw {
         red: u8,
         green: u8,
         blue: u8,
         white: u8,
     },
-    #[serde(rename = "rgbwB")]
     RgbwB {
         red: u8,
         green: u8,
@@ -45,6 +41,7 @@ pub enum BcmChangeBrightnessValue {
 impl From<BcmChangeBrightnessValue> for BcmValue {
     fn from(value: BcmChangeBrightnessValue) -> BcmValue {
         match value {
+            BcmChangeBrightnessValue::Binary { value } => BcmValue::Binary(value),
             BcmChangeBrightnessValue::Single { value } => BcmValue::Single(value),
             BcmChangeBrightnessValue::Rgb { red, green, blue } => BcmValue::Rgb(red, green, blue),
             BcmChangeBrightnessValue::RgbB {
